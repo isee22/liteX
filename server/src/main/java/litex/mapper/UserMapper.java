@@ -12,6 +12,9 @@ public interface UserMapper {
     @Select("SELECT * FROM user WHERE username = #{username}")
     User findByUsername(String username);
     
+    @Select("SELECT * FROM user WHERE email = #{email}")
+    User findByEmail(String email);
+    
     @Insert("INSERT INTO user (username, password, nickname, avatar, banner, bio, followingcount, followerscount, createdat) " +
             "VALUES (#{username}, #{password}, #{nickname}, #{avatar}, #{banner}, #{bio}, #{followingcount}, #{followerscount}, #{createdat})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
@@ -32,4 +35,13 @@ public interface UserMapper {
             "ORDER BY followerscount DESC LIMIT #{limit}" +
             "</script>")
     List<User> findRecommend(@Param("userid") Long userid, @Param("limit") int limit);
+    
+    @Update("UPDATE user SET password = #{password} WHERE id = #{id}")
+    int updatePassword(@Param("id") Long id, @Param("password") String password);
+    
+    @Select("SELECT * FROM user WHERE username LIKE 'bot_%' ORDER BY RAND() LIMIT #{limit}")
+    List<User> findBotUsers(@Param("limit") int limit);
+    
+    @Select("SELECT * FROM user ORDER BY RAND() LIMIT #{limit}")
+    List<User> findRandomUsers(@Param("limit") int limit);
 }

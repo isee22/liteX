@@ -1,7 +1,7 @@
 package litex.service;
 
-import litejava.App;
 import litejava.UploadedFile;
+import litejava.plugin.ConfPlugin;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,6 +24,12 @@ public class UploadService {
     
     private static final long DEFAULT_IMAGE_MAX_SIZE = 5 * 1024 * 1024; // 5MB
     private static final long DEFAULT_VIDEO_MAX_SIZE = 50 * 1024 * 1024; // 50MB
+    
+    private ConfPlugin conf;
+    
+    public void init(ConfPlugin conf) {
+        this.conf = conf;
+    }
     
     /**
      * 上传图片并返回 URL
@@ -95,28 +101,24 @@ public class UploadService {
     }
     
     private String getUploadPath() {
-        if (App.instance != null && App.instance.conf != null) {
-            return App.instance.conf.getString("upload", "path", "uploads");
+        if (conf != null) {
+            return conf.getString("upload", "path", "uploads");
         }
         return "uploads";
     }
     
     private long getImageMaxSize() {
-        if (App.instance != null && App.instance.conf != null) {
-            return App.instance.conf.getInt("upload", "maxSize", (int) DEFAULT_IMAGE_MAX_SIZE);
+        if (conf != null) {
+            return conf.getInt("upload", "maxSize", (int) DEFAULT_IMAGE_MAX_SIZE);
         }
         return DEFAULT_IMAGE_MAX_SIZE;
     }
     
     private long getVideoMaxSize() {
-        if (App.instance != null && App.instance.conf != null) {
-            return App.instance.conf.getInt("upload", "videoMaxSize", (int) DEFAULT_VIDEO_MAX_SIZE);
+        if (conf != null) {
+            return conf.getInt("upload", "videoMaxSize", (int) DEFAULT_VIDEO_MAX_SIZE);
         }
         return DEFAULT_VIDEO_MAX_SIZE;
-    }
-    
-    private long getMaxSize() {
-        return getImageMaxSize();
     }
     
     private String getExtension(String filename) {

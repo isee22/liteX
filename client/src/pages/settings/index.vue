@@ -104,7 +104,10 @@
             <text class="section-title">字体大小</text>
             <view class="font-size-slider">
               <text class="font-small">Aa</text>
-              <view class="slider-track">
+              <view class="slider-track" @click="onSliderClick">
+                <view class="slider-dots">
+                  <view v-for="i in 5" :key="i" class="slider-dot" :class="{ active: fontSize >= i - 1 }" @click.stop="fontSize = i - 1"></view>
+                </view>
                 <view class="slider-thumb" :style="{ left: fontSize * 25 + '%' }"></view>
               </view>
               <text class="font-large">Aa</text>
@@ -189,12 +192,22 @@ const colors = [
 
 const showDisplay = () => { currentSection.value = 'display' }
 const goBack = () => uni.navigateBack()
-const goAccount = () => uni.showToast({ title: '功能开发中', icon: 'none' })
+const goAccount = () => uni.navigateTo({ url: '/pages/settings/account' })
 const goSecurity = () => uni.showToast({ title: '功能开发中', icon: 'none' })
 const goPrivacy = () => uni.showToast({ title: '功能开发中', icon: 'none' })
 const goNotifications = () => uni.showToast({ title: '功能开发中', icon: 'none' })
 const goBlocked = () => uni.navigateTo({ url: '/pages/settings/blocked' })
-const goMuted = () => uni.showToast({ title: '功能开发中', icon: 'none' })
+const goMuted = () => uni.navigateTo({ url: '/pages/settings/muted' })
+
+const onSliderClick = (e) => {
+  // 点击滑块轨道时计算位置
+  const rect = e.currentTarget.getBoundingClientRect?.() || { width: 200 }
+  const x = e.detail?.x || e.clientX || 0
+  const left = rect.left || 0
+  const width = rect.width || 200
+  const percent = Math.max(0, Math.min(1, (x - left) / width))
+  fontSize.value = Math.round(percent * 4)
+}
 
 const handleLogout = () => {
   uni.showModal({
@@ -287,8 +300,11 @@ const handleLogout = () => {
 .font-size-slider { display: flex; align-items: center; gap: 16px; }
 .font-small { font-size: 13px; }
 .font-large { font-size: 20px; }
-.slider-track { flex: 1; height: 4px; background: var(--border-color); border-radius: 2px; position: relative; }
-.slider-thumb { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 16px; height: 16px; background: var(--accent-primary); border-radius: 50%; }
+.slider-track { flex: 1; height: 4px; background: var(--border-color); border-radius: 2px; position: relative; cursor: pointer; }
+.slider-dots { display: flex; justify-content: space-between; position: absolute; width: 100%; top: 50%; transform: translateY(-50%); }
+.slider-dot { width: 8px; height: 8px; background: var(--border-color); border-radius: 50%; cursor: pointer; }
+.slider-dot.active { background: var(--accent-primary); }
+.slider-thumb { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 16px; height: 16px; background: var(--accent-primary); border-radius: 50%; cursor: pointer; }
 .color-options { display: flex; gap: 16px; }
 .color-option { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-weight: bold; }
 .bg-options { display: flex; gap: 16px; }

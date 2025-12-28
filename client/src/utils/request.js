@@ -1,4 +1,5 @@
-const BASE_URL = 'http://localhost:8080/api'
+export const BASE_URL = 'http://localhost:8080/api'
+export const SERVER_URL = 'http://localhost:8080'
 
 export const request = (options) => {
   return new Promise((resolve, reject) => {
@@ -13,14 +14,19 @@ export const request = (options) => {
         'Authorization': token ? `Bearer ${token}` : ''
       },
       success: (res) => {
-        if (res.statusCode === 200) {
-          resolve(res.data)
-        } else if (res.statusCode === 401) {
-          uni.removeStorageSync('token')
-          uni.navigateTo({ url: '/pages/login/index' })
-          reject(res.data)
+        const data = res.data
+        // 统一判断业务码
+        if (data.code === 0) {
+          resolve(data)
         } else {
-          reject(res.data)
+          // 未登录
+          if (data.code === 401) {
+            uni.removeStorageSync('token')
+            uni.navigateTo({ url: '/pages/login/index' })
+          }
+          console.error('请求失败:', data)
+          uni.showToast({ title: data.msg || '请求失败', icon: 'none', duration: 2000 })
+          reject(data)
         }
       },
       fail: (err) => {

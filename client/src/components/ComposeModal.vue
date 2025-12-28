@@ -5,13 +5,13 @@
       <view class="compose-header">
         <text class="close-btn" @click="close">✕</text>
         <view class="spacer"></view>
-        <text class="draft-btn">草稿</text>
+        <text class="draft-btn" @click="showTip('草稿')">草稿</text>
       </view>
 
       <view class="compose-body">
         <image class="avatar" :src="userStore.userInfo?.avatar || '/static/default-avatar.png'" />
         <view class="compose-content">
-          <view class="visibility-btn">所有人 ▾</view>
+          <view class="visibility-btn" @click="showTip('可见性设置')">所有人 ▾</view>
           <textarea 
             v-model="content" 
             class="compose-input" 
@@ -26,7 +26,7 @@
             </view>
           </view>
           <view class="reply-setting">
-            <text class="reply-text">🌍 所有人都可以回复</text>
+            <text class="reply-text" @click="showTip('回复设置')">🌍 所有人都可以回复</text>
           </view>
         </view>
       </view>
@@ -34,11 +34,11 @@
       <view class="compose-footer">
         <view class="toolbar">
           <text class="tool-icon" @click="chooseImage">🖼️</text>
-          <text class="tool-icon">📷</text>
-          <text class="tool-icon">📊</text>
-          <text class="tool-icon">😊</text>
-          <text class="tool-icon">📅</text>
-          <text class="tool-icon">📍</text>
+          <text class="tool-icon" @click="showTip('拍照')">📷</text>
+          <text class="tool-icon" @click="showTip('投票')">📊</text>
+          <text class="tool-icon" @click="showTip('表情')">😊</text>
+          <text class="tool-icon" @click="showTip('日程')">📅</text>
+          <text class="tool-icon" @click="showTip('位置')">📍</text>
         </view>
         <view class="footer-right">
           <view class="char-progress" :style="{ '--progress': (content.length / 280) * 100 + '%' }">
@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useTweetStore } from '@/stores/tweet'
 import { useComposeStore } from '@/stores/compose'
@@ -64,6 +64,11 @@ import { useComposeStore } from '@/stores/compose'
 const userStore = useUserStore()
 const tweetStore = useTweetStore()
 const composeStore = useComposeStore()
+
+// 调试
+watch(() => composeStore.visible, (v) => {
+  console.log('ComposeModal visible changed:', v)
+})
 
 const content = ref('')
 const images = ref([])
@@ -84,15 +89,36 @@ const chooseImage = () => {
 
 const removeImage = (i) => images.value.splice(i, 1)
 
+const showTip = (name) => uni.showToast({ title: `${name}功能开发中`, icon: 'none' })
+
 const submitTweet = async () => {
   if (!content.value.trim() || loading.value) return
   loading.value = true
   try {
-    await tweetStore.createTweet(content.value, images.value)
+    // 先上传图片
+    const uploadedUrls = []
+    for (const img of images.value) {
+      const res = await uni.uploadFile({
+        url: 'http://localhost:8080/api/upload/image',
+        filePath: img,
+        name: 'file',
+        header: {
+          'Authorization': 'Bearer ' + uni.getStorageSync('token')
+        }
+      })
+      const data = JSON.parse(res.data)
+      if (data.code === 0) {
+        uploadedUrls.push(data.data.url)
+      } else {
+        throw new Error(data.msg || '图片上传失败')
+      }
+    }
+    
+    await tweetStore.createTweet(content.value, uploadedUrls)
     uni.showToast({ title: '发布成功', icon: 'success' })
     close()
   } catch (e) {
-    uni.showToast({ title: e.message || '发布失败', icon: 'none' })
+    // request.js 已经显示了错误提示
   } finally {
     loading.value = false
   }

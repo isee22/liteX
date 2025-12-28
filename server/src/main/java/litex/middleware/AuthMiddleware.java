@@ -3,11 +3,11 @@ package litex.middleware;
 import litejava.Context;
 import litejava.MiddlewarePlugin;
 import litejava.Next;
+import litejava.util.Maps;
 import litex.util.JwtUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * JWT 认证中间件
@@ -38,6 +38,12 @@ public class AuthMiddleware extends MiddlewarePlugin {
     
     @Override
     public void handle(Context ctx, Next next) throws Exception {
+        // 只拦截 /api/ 开头的路径，其他路径放行
+        if (!ctx.path.startsWith("/api/")) {
+            next.run();
+            return;
+        }
+        
         // 检查是否为排除路径
         if (isExcludedPath(ctx.path)) {
             next.run();
@@ -52,13 +58,13 @@ public class AuthMiddleware extends MiddlewarePlugin {
         
         // 检查 header 是否存在
         if (auth == null || auth.isEmpty()) {
-            ctx.status(401).json(Map.of("code", -1, "msg", "未登录"));
+            ctx.json(Maps.of("code", 401, "msg", "未登录"));
             return;
         }
         
         // 检查 Bearer 格式
         if (!auth.startsWith("Bearer ")) {
-            ctx.status(401).json(Map.of("code", -1, "msg", "无效的token"));
+            ctx.json(Maps.of("code", 401, "msg", "无效的token"));
             return;
         }
         
@@ -67,7 +73,7 @@ public class AuthMiddleware extends MiddlewarePlugin {
         Long userid = JwtUtil.getUserId(token);
         
         if (userid == null) {
-            ctx.status(401).json(Map.of("code", -1, "msg", "token已过期"));
+            ctx.json(Maps.of("code", 401, "msg", "token已过期"));
             return;
         }
         

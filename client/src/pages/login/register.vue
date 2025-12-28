@@ -33,9 +33,9 @@
 
       <view class="terms">
         <text>注册即表示你同意</text>
-        <text class="link">服务条款</text>
+        <text class="link" @click="goTerms">服务条款</text>
         <text>和</text>
-        <text class="link">隐私政策</text>
+        <text class="link" @click="goPrivacy">隐私政策</text>
       </view>
 
       <view class="login-link">
@@ -73,7 +73,7 @@ const handleRegister = async () => {
     uni.showToast({ title: '注册成功', icon: 'success' })
     setTimeout(() => uni.switchTab({ url: '/pages/home/index' }), 500)
   } catch (e) {
-    uni.showToast({ title: e.message || '注册失败', icon: 'none' })
+    // request.js 已经显示了错误提示
   } finally {
     loading.value = false
   }
@@ -81,6 +81,8 @@ const handleRegister = async () => {
 
 const goBack = () => uni.navigateBack()
 const goLogin = () => uni.navigateBack()
+const goTerms = () => uni.navigateTo({ url: '/pages/login/terms' })
+const goPrivacy = () => uni.navigateTo({ url: '/pages/login/privacy' })
 </script>
 
 <style scoped>

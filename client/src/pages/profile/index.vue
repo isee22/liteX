@@ -47,7 +47,7 @@
         <view class="tab" :class="{ active: tab === 'tweets' }" @click="switchTab('tweets')">帖子</view>
         <view class="tab" :class="{ active: tab === 'replies' }" @click="switchTab('replies')">回复</view>
         <view class="tab" :class="{ active: tab === 'media' }" @click="switchTab('media')">媒体</view>
-        <view class="tab" :class="{ active: tab === 'likes' }" @click="switchTab('likes')">喜欢</view>
+        <view class="tab" :class="{ active: tab === 'likes' }" @click="switchTab('likes')">点赞</view>
       </view>
 
       <!-- 推文列表 -->
@@ -97,7 +97,11 @@ const fetchTweets = async () => {
   loading.value = true
   try {
     const id = userId.value || 'me'
-    const endpoint = tab.value === 'likes' ? `/user/${id}/likes` : `/user/${id}/tweets`
+    let endpoint = `/user/${id}/tweets`
+    if (tab.value === 'replies') endpoint = `/user/${id}/replies`
+    else if (tab.value === 'media') endpoint = `/user/${id}/media`
+    else if (tab.value === 'likes') endpoint = `/user/${id}/likes`
+    
     const res = await get(endpoint)
     tweets.value = (res.data || []).map(item => item.tweet ? { ...item.tweet, user: item.user, liked: item.liked } : item)
   } catch (e) {}
@@ -128,8 +132,14 @@ const goBack = () => {
   else uni.switchTab({ url: '/pages/home/index' })
 }
 const editProfile = () => uni.navigateTo({ url: '/pages/profile/edit' })
-const goFollowing = () => uni.navigateTo({ url: `/pages/profile/following?id=${userId.value || userStore.userInfo?.id}` })
-const goFollowers = () => uni.navigateTo({ url: `/pages/profile/followers?id=${userId.value || userStore.userInfo?.id}` })
+const goFollowing = () => {
+  const id = userId.value || userStore.userInfo?.id
+  if (id) uni.navigateTo({ url: `/pages/profile/following?id=${id}` })
+}
+const goFollowers = () => {
+  const id = userId.value || userStore.userInfo?.id
+  if (id) uni.navigateTo({ url: `/pages/profile/followers?id=${id}` })
+}
 </script>
 
 <style scoped>

@@ -8,7 +8,7 @@
           <text class="search-icon">🔍</text>
           <input class="search-input" v-model="keyword" @confirm="search" placeholder="搜索" />
         </view>
-        <text class="settings-icon">⚙️</text>
+        <text class="settings-icon" @click="showSettingsTip">⚙️</text>
       </view>
       
       <view class="tabs">
@@ -115,6 +115,7 @@ const toggleFollow = async (user) => {
 
 const goBack = () => uni.navigateBack()
 const goProfile = (id) => uni.navigateTo({ url: `/pages/profile/index?id=${id}` })
+const showSettingsTip = () => uni.showToast({ title: '搜索设置功能开发中', icon: 'none' })
 </script>
 
 <style scoped>

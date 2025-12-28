@@ -1,8 +1,10 @@
 package litex.service;
 
+import litejava.util.Maps;
 import litex.DB;
 import litex.entity.Bookmark;
 import litex.entity.Tweet;
+import litex.entity.User;
 import litex.mapper.*;
 import java.util.*;
 
@@ -18,14 +20,16 @@ public class BookmarkService {
             Tweet tweet = DB.execute(TweetMapper.class, m -> m.findById(b.tweetid));
             if (tweet != null) {
                 item.put("tweet", tweet);
-                item.put("user", DB.execute(UserMapper.class, m -> m.findById(tweet.userid)));
+                User user = DB.execute(UserMapper.class, m -> m.findById(tweet.userid));
+                if (user != null) user.password = null;
+                item.put("user", user);
                 item.put("liked", DB.execute(LikeMapper.class, m -> m.find(userid, tweet.id)) != null);
                 item.put("bookmarked", true);
                 item.put("bookmarkat", b.createdat);
                 list.add(item);
             }
         }
-        return Map.of("list", list);
+        return Maps.of("list", list);
     }
     
     public boolean toggle(long userid, long tweetid) {

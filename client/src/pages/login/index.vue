@@ -4,10 +4,10 @@
       <view class="logo">𝕏</view>
       <text class="title">登录</text>
 
-      <button class="btn-oauth">
+      <button class="btn-oauth" @click="showOAuthTip">
         <text>🔵 使用 Google 账号登录</text>
       </button>
-      <button class="btn-oauth">
+      <button class="btn-oauth" @click="showOAuthTip">
         <text>🍎 使用 Apple 账号登录</text>
       </button>
 
@@ -29,7 +29,7 @@
         </button>
       </view>
 
-      <button class="btn-forgot">忘记密码？</button>
+      <button class="btn-forgot" @click="goForgot">忘记密码？</button>
 
       <view class="register-link">
         <text>没有账号？</text>
@@ -56,13 +56,15 @@ const handleLogin = async () => {
     await userStore.login(form.username, form.password)
     uni.switchTab({ url: '/pages/home/index' })
   } catch (e) {
-    uni.showToast({ title: e.message || '登录失败', icon: 'none' })
+    // request.js 已经显示了错误提示
   } finally {
     loading.value = false
   }
 }
 
 const goRegister = () => uni.navigateTo({ url: '/pages/login/register' })
+const goForgot = () => uni.navigateTo({ url: '/pages/login/forgot' })
+const showOAuthTip = () => uni.showToast({ title: '第三方登录暂未开放', icon: 'none' })
 </script>
 
 <style scoped>

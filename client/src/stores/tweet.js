@@ -6,10 +6,11 @@ export const useTweetStore = defineStore('tweet', () => {
   const tweets = ref([])
   const loading = ref(false)
 
-  const fetchTimeline = async (page = 1) => {
+  const fetchTimeline = async (page = 1, tab = 'foryou') => {
     loading.value = true
     try {
-      const res = await get('/tweets/timeline', { page, size: 20 })
+      const url = tab === 'following' ? '/tweets/following' : '/tweets/timeline'
+      const res = await get(url, { page, size: 20 })
       if (page === 1) {
         tweets.value = res.data.list
       } else {
@@ -22,7 +23,11 @@ export const useTweetStore = defineStore('tweet', () => {
   }
 
   const createTweet = async (content, images = []) => {
-    const res = await post('/tweets', { content, images })
+    const data = { content }
+    if (images.length > 0) {
+      data.images = images
+    }
+    const res = await post('/tweets', data)
     tweets.value.unshift(res.data)
     return res
   }

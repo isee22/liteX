@@ -66,6 +66,11 @@
     </view>
     <view v-if="showMore" class="overlay" @click="showMore = false"></view>
   </view>
+  
+  <!-- 发帖弹窗 - 使用 Teleport 渲染到 body 避免 z-index 问题 -->
+  <Teleport to="body">
+    <ComposeModal />
+  </Teleport>
 </template>
 
 <script setup>
@@ -74,6 +79,7 @@ import { useUserStore } from '@/stores/user'
 import { useNotificationStore } from '@/stores/notification'
 import { useMessageStore } from '@/stores/message'
 import { useComposeStore } from '@/stores/compose'
+import ComposeModal from '@/components/ComposeModal.vue'
 
 const props = defineProps({ current: String })
 
@@ -294,6 +300,7 @@ const goDisplay = () => { showMore.value = false; uni.navigateTo({ url: '/pages/
   right: 0;
   bottom: 0;
   z-index: 50;
+  background: transparent;
 }
 
 @media (max-width: 1280px) {

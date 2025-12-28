@@ -19,7 +19,7 @@
       </view>
       
       <view class="bookmark-list">
-        <TweetItem v-for="item in bookmarks" :key="item.id" :tweet="item" />
+        <TweetItem v-for="item in bookmarks" :key="item.id" :tweet="item" @refresh="loadBookmarks" />
         
         <view v-if="!bookmarks.length && !loading" class="empty">
           <text class="empty-icon">🔖</text>
@@ -50,7 +50,13 @@ const showMenu = ref(false)
 onMounted(async () => {
   try {
     const res = await get('/bookmarks')
-    bookmarks.value = (res.data || []).map(item => item.tweet ? { ...item.tweet, user: item.user } : item)
+    const data = res.data?.list || res.data || []
+    bookmarks.value = data.map(item => {
+      if (item.tweet) {
+        return { ...item.tweet, user: item.user, liked: item.liked, bookmarked: true }
+      }
+      return item
+    })
   } catch (e) {}
   loading.value = false
 })
@@ -82,10 +88,12 @@ const clearAll = () => {
   display: flex;
   max-width: 1280px;
   margin: 0 auto;
+  background: var(--bg-primary);
 }
 .main-content {
   flex: 1;
   max-width: 600px;
+  min-width: 600px;
   border-left: 1px solid var(--border-color);
   border-right: 1px solid var(--border-color);
   min-height: 100vh;
@@ -178,9 +186,10 @@ const clearAll = () => {
   padding: 32px;
   color: var(--text-secondary);
 }
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .main-content {
     max-width: 100%;
+    min-width: auto;
     border: none;
   }
 }

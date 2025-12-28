@@ -9,7 +9,7 @@
         </view>
         <text class="user-handle">@{{ targetUser?.username }}</text>
       </view>
-      <text class="more">ℹ️</text>
+      <text class="more" @click="showTip('会话详情')">ℹ️</text>
     </view>
     
     <!-- 用户信息卡片 -->
@@ -45,8 +45,8 @@
     <view class="input-bar">
       <view class="input-tools">
         <text class="tool-icon" @click="chooseImage">🖼️</text>
-        <text class="tool-icon">📷</text>
-        <text class="tool-icon">😊</text>
+        <text class="tool-icon" @click="showTip('拍照')">📷</text>
+        <text class="tool-icon" @click="showTip('表情')">😊</text>
       </view>
       <view class="input-wrap">
         <input 
@@ -94,7 +94,7 @@ const fetchUser = async () => {
 
 const fetchMessages = async () => {
   try {
-    const res = await get(`/messages/${targetUserId.value}`)
+    const res = await get(`/messages/chat/${targetUserId.value}`)
     messages.value = res.data || []
     nextTick(() => { scrollTop.value = 99999 })
   } catch (e) {}
@@ -107,12 +107,10 @@ const loadMore = async () => {
 const sendMessage = async () => {
   if (!inputText.value.trim()) return
   try {
-    await post(`/messages/${targetUserId.value}`, { content: inputText.value })
+    await post('/messages/send', { toUserId: targetUserId.value, content: inputText.value })
     inputText.value = ''
     fetchMessages()
-  } catch (e) {
-    uni.showToast({ title: '发送失败', icon: 'none' })
-  }
+  } catch (e) {}
 }
 
 const chooseImage = () => {
@@ -154,6 +152,7 @@ const formatJoinDate = (date) => {
 
 const goBack = () => uni.navigateBack()
 const goProfile = () => uni.navigateTo({ url: `/pages/profile/index?id=${targetUserId.value}` })
+const showTip = (name) => uni.showToast({ title: `${name}功能开发中`, icon: 'none' })
 </script>
 
 <style scoped>

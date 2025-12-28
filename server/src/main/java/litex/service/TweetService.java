@@ -3,6 +3,7 @@ package litex.service;
 import litex.DB;
 import litex.entity.*;
 import litex.mapper.*;
+import litejava.util.Maps;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,6 +62,18 @@ public class TweetService {
     
     public Map<String, Object> getTimeline(Long userid, int page, int size) {
         List<Tweet> tweets = DB.execute(TweetMapper.class, m -> m.findTimeline((page - 1) * size, size));
+        return buildTimelineResult(tweets, userid);
+    }
+    
+    public Map<String, Object> getFollowingTimeline(Long userid, int page, int size) {
+        if (userid == null) {
+            return Maps.of("list", new ArrayList<>());
+        }
+        List<Tweet> tweets = DB.execute(TweetMapper.class, m -> m.findFollowingTimeline(userid, (page - 1) * size, size));
+        return buildTimelineResult(tweets, userid);
+    }
+    
+    private Map<String, Object> buildTimelineResult(List<Tweet> tweets, Long userid) {
         List<Map<String, Object>> list = new ArrayList<>();
         
         for (Tweet t : tweets) {
@@ -70,9 +83,10 @@ public class TweetService {
             if (user != null) user.password = null;
             item.put("user", user);
             item.put("liked", userid != null && DB.execute(LikeMapper.class, m -> m.find(userid, t.id)) != null);
+            item.put("retweeted", userid != null && DB.execute(TweetMapper.class, m -> m.findRetweet(userid, t.id)) != null);
             list.add(item);
         }
-        return Map.of("list", list);
+        return Maps.of("list", list);
     }
     
     public Map<String, Object> create(Long userid, String content, String images) {
@@ -140,6 +154,7 @@ public class TweetService {
         if (user != null) user.password = null;
         result.put("user", user);
         result.put("liked", userid != null && DB.execute(LikeMapper.class, m -> m.find(userid, id)) != null);
+        result.put("retweeted", userid != null && DB.execute(TweetMapper.class, m -> m.findRetweet(userid, id)) != null);
         return result;
     }
     
@@ -188,14 +203,22 @@ public class TweetService {
         Tweet original = DB.execute(TweetMapper.class, m -> m.findById(tweetid));
         if (original == null) return;
         
-        Tweet retweet = new Tweet();
-        retweet.userid = userid;
-        retweet.retweetid = tweetid;
-        retweet.content = original.content;
-        retweet.images = original.images;
-        DB.execute(TweetMapper.class, m -> m.insert(retweet));
-        
-        original.retweetcount++;
+        // 检查是否已转推
+        Tweet existing = DB.execute(TweetMapper.class, m -> m.findRetweet(userid, tweetid));
+        if (existing != null) {
+            // 取消转推
+            DB.execute(TweetMapper.class, m -> m.delete(existing.id));
+            original.retweetcount = Math.max(0, original.retweetcount - 1);
+        } else {
+            // 转推
+            Tweet retweet = new Tweet();
+            retweet.userid = userid;
+            retweet.retweetid = tweetid;
+            retweet.content = original.content;
+            retweet.images = original.images;
+            DB.execute(TweetMapper.class, m -> m.insert(retweet));
+            original.retweetcount++;
+        }
         DB.execute(TweetMapper.class, m -> m.update(original));
     }
     
@@ -260,5 +283,14 @@ public class TweetService {
     
     public List<Tweet> findByUserId(long userid) {
         return DB.execute(TweetMapper.class, m -> m.findByUserId(userid));
+    }
+    
+    /**
+     * 获取随机推文（用于 BotPlugin）
+     */
+    public Tweet getRandomTweet() {
+        List<Tweet> tweets = DB.execute(TweetMapper.class, m -> m.findTimeline(0, 50));
+        if (tweets.isEmpty()) return null;
+        return tweets.get(new Random().nextInt(tweets.size()));
     }
 }

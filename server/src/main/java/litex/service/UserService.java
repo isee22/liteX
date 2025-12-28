@@ -3,6 +3,7 @@ package litex.service;
 import litex.DB;
 import litex.entity.*;
 import litex.mapper.*;
+import litejava.util.Maps;
 import org.mindrot.jbcrypt.BCrypt;
 import java.util.*;
 
@@ -42,6 +43,10 @@ public class UserService {
     
     public User findByUsername(String username) {
         return DB.execute(UserMapper.class, m -> m.findByUsername(username));
+    }
+    
+    public User findByEmail(String email) {
+        return DB.execute(UserMapper.class, m -> m.findByEmail(email));
     }
     
     public User authenticate(String username, String password) {
@@ -127,7 +132,7 @@ public class UserService {
                 list.add(item);
             }
         }
-        return Map.of("list", list);
+        return Maps.of("list", list);
     }
     
     public Map<String, Object> getFollowing(long userid, long currentUserid, int page, int size) {
@@ -145,7 +150,7 @@ public class UserService {
                 list.add(item);
             }
         }
-        return Map.of("list", list);
+        return Maps.of("list", list);
     }
     
     public List<Map<String, Object>> getRecommend(Long userid, int limit) {
@@ -160,5 +165,122 @@ public class UserService {
             list.add(item);
         }
         return list;
+    }
+    
+    public boolean changePassword(long userid, String oldPassword, String newPassword) {
+        User user = DB.execute(UserMapper.class, m -> m.findById(userid));
+        if (user == null || !BCrypt.checkpw(oldPassword, user.password)) {
+            return false;
+        }
+        user.password = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+        DB.execute(UserMapper.class, m -> m.updatePassword(user.id, user.password));
+        return true;
+    }
+    
+    public List<Map<String, Object>> getMutedUsers(long userid) {
+        List<Mute> mutes = DB.execute(MuteMapper.class, m -> m.findByUserId(userid));
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (Mute mute : mutes) {
+            User u = DB.execute(UserMapper.class, m -> m.findById(mute.targetid));
+            if (u != null) {
+                u.password = null;
+                list.add(Maps.of("user", u));
+            }
+        }
+        return list;
+    }
+    
+    public void toggleMute(long userid, long targetid) {
+        Mute existing = DB.execute(MuteMapper.class, m -> m.find(userid, targetid));
+        if (existing != null) {
+            DB.execute(MuteMapper.class, m -> m.delete(existing.id));
+        } else {
+            Mute mute = new Mute();
+            mute.userid = userid;
+            mute.targetid = targetid;
+            DB.execute(MuteMapper.class, m -> m.insert(mute));
+        }
+    }
+    
+    public List<Map<String, Object>> getUserTweets(long userid, Long currentUserid) {
+        List<Tweet> tweets = DB.execute(TweetMapper.class, m -> m.findByUserId(userid));
+        User user = DB.execute(UserMapper.class, m -> m.findById(userid));
+        if (user != null) user.password = null;
+        
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (Tweet t : tweets) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("tweet", t);
+            item.put("user", user);
+            item.put("liked", currentUserid != null && DB.execute(LikeMapper.class, m -> m.find(currentUserid, t.id)) != null);
+            list.add(item);
+        }
+        return list;
+    }
+    
+    public List<Map<String, Object>> getUserReplies(long userid, Long currentUserid) {
+        List<Comment> comments = DB.execute(CommentMapper.class, m -> m.findByUserId(userid));
+        User user = DB.execute(UserMapper.class, m -> m.findById(userid));
+        if (user != null) user.password = null;
+        
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (Comment c : comments) {
+            Tweet originalTweet = DB.execute(TweetMapper.class, m -> m.findById(c.tweetid));
+            if (originalTweet != null) {
+                Map<String, Object> item = new HashMap<>();
+                Map<String, Object> tweetLike = new HashMap<>();
+                tweetLike.put("id", c.id);
+                tweetLike.put("userid", c.userid);
+                tweetLike.put("content", c.content);
+                tweetLike.put("createdat", c.createdat);
+                tweetLike.put("likecount", 0);
+                tweetLike.put("replycount", 0);
+                tweetLike.put("retweetcount", 0);
+                tweetLike.put("commentcount", 0);
+                item.put("tweet", tweetLike);
+                item.put("user", user);
+                item.put("liked", false);
+                item.put("replyTo", originalTweet);
+                User originalUser = DB.execute(UserMapper.class, m -> m.findById(originalTweet.userid));
+                if (originalUser != null) originalUser.password = null;
+                item.put("replyToUser", originalUser);
+                list.add(item);
+            }
+        }
+        return list;
+    }
+    
+    public List<Map<String, Object>> getUserMedia(long userid, Long currentUserid) {
+        List<Tweet> tweets = DB.execute(TweetMapper.class, m -> m.findByUserIdWithMedia(userid));
+        User user = DB.execute(UserMapper.class, m -> m.findById(userid));
+        if (user != null) user.password = null;
+        
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (Tweet t : tweets) {
+            Map<String, Object> item = new HashMap<>();
+            item.put("tweet", t);
+            item.put("user", user);
+            item.put("liked", currentUserid != null && DB.execute(LikeMapper.class, m -> m.find(currentUserid, t.id)) != null);
+            list.add(item);
+        }
+        return list;
+    }
+    
+    /**
+     * 获取随机机器人用户（用于 BotPlugin）
+     */
+    public User getRandomBotUser() {
+        List<User> users = DB.execute(UserMapper.class, m -> m.findBotUsers(10));
+        if (users.isEmpty()) return null;
+        return users.get(new Random().nextInt(users.size()));
+    }
+    
+    /**
+     * 获取随机用户（用于 BotPlugin）
+     */
+    public User getRandomUser() {
+        List<User> users = DB.execute(UserMapper.class, m -> m.findRandomUsers(10));
+        if (users.isEmpty()) return null;
+        return users.get(new Random().nextInt(users.size()));
     }
 }

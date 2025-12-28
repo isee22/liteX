@@ -4,8 +4,7 @@ import litex.Service;
 import litejava.Context;
 import litejava.Routes;
 import litejava.UploadedFile;
-
-import java.util.Map;
+import litejava.util.Maps;
 
 public class UploadController {
     
@@ -20,17 +19,17 @@ public class UploadController {
         UploadedFile file = ctx.file("file");
         
         if (file == null) {
-            ctx.status(400).json(Map.of("error", "请选择文件"));
+            ctx.fail("请选择文件");
             return;
         }
         
         try {
             String url = Service.upload.uploadImage(file);
-            ctx.ok(Map.of("url", url));
+            ctx.ok(Maps.of("url", url));
         } catch (IllegalArgumentException e) {
-            ctx.status(400).json(Map.of("error", e.getMessage()));
+            ctx.fail(e.getMessage());
         } catch (Exception e) {
-            ctx.status(500).json(Map.of("error", "上传失败"));
+            ctx.fail("上传失败");
         }
     }
     
@@ -38,17 +37,17 @@ public class UploadController {
         UploadedFile file = ctx.file("file");
         
         if (file == null) {
-            ctx.status(400).json(Map.of("error", "请选择文件"));
+            ctx.fail("请选择文件");
             return;
         }
         
         try {
             String url = Service.upload.uploadVideo(file);
-            ctx.ok(Map.of("url", url));
+            ctx.ok(Maps.of("url", url));
         } catch (IllegalArgumentException e) {
-            ctx.status(400).json(Map.of("error", e.getMessage()));
+            ctx.fail(e.getMessage());
         } catch (Exception e) {
-            ctx.status(500).json(Map.of("error", "上传失败"));
+            ctx.fail("上传失败");
         }
     }
 }

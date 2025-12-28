@@ -23,7 +23,7 @@
           <text>{{ tweet.retweetCount || 0 }}</text>
         </view>
         <view class="action" :class="{ liked: tweet.liked }" @click.stop="onLike">
-          <text class="icon">{{ tweet.liked ? '❤️' : '🤍' }}</text>
+          <text class="icon">{{ tweet.liked ? '👍' : '👍🏻' }}</text>
           <text>{{ tweet.likeCount || 0 }}</text>
         </view>
         <view class="action" @click.stop="onShare">

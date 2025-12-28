@@ -37,12 +37,12 @@
           <text>💬</text>
           <text v-if="tweet.replycount">{{ formatCount(tweet.replycount) }}</text>
         </view>
-        <view class="action" :class="{ retweeted: tweet.retweeted }" @click.stop="handleRetweet">
+        <view class="action" :class="{ retweeted: tweet.retweeted, disabled: isOwnTweet }" @click.stop="handleRetweet">
           <text>🔁</text>
           <text v-if="tweet.retweetcount">{{ formatCount(tweet.retweetcount) }}</text>
         </view>
-        <view class="action" :class="{ liked: tweet.liked }" @click.stop="handleLike">
-          <text>{{ tweet.liked ? '❤️' : '🤍' }}</text>
+        <view class="action" :class="{ liked: tweet.liked, disabled: isOwnTweet }" @click.stop="handleLike">
+          <text>{{ tweet.liked ? '👍' : '👍🏻' }}</text>
           <text v-if="tweet.likecount">{{ formatCount(tweet.likecount) }}</text>
         </view>
         <view class="action" @click.stop>
@@ -68,6 +68,9 @@ import { useUserStore } from '@/stores/user'
 const props = defineProps({ tweet: Object })
 const emit = defineEmits(['refresh'])
 const userStore = useUserStore()
+
+// 是否是自己的帖子
+const isOwnTweet = computed(() => props.tweet.user?.id === userStore.userInfo?.id)
 
 const parsedImages = computed(() => {
   if (!props.tweet?.images) return []
@@ -99,6 +102,7 @@ const goProfile = () => uni.navigateTo({ url: `/pages/profile/index?id=${props.t
 
 const handleLike = async () => {
   if (!userStore.requireLogin()) return
+  if (isOwnTweet.value) return
   try {
     await post(`/tweets/${props.tweet.id}/like`)
     props.tweet.liked = !props.tweet.liked
@@ -108,10 +112,17 @@ const handleLike = async () => {
 
 const handleRetweet = async () => {
   if (!userStore.requireLogin()) return
+  if (isOwnTweet.value) return
+  if (props.tweet.retweeted) {
+    uni.showToast({ title: '你已经转推过了', icon: 'none' })
+    return
+  }
   try {
     await post(`/tweets/${props.tweet.id}/retweet`)
-    props.tweet.retweeted = !props.tweet.retweeted
-    props.tweet.retweetcount = (props.tweet.retweetcount || 0) + (props.tweet.retweeted ? 1 : -1)
+    props.tweet.retweeted = true
+    props.tweet.retweetcount = (props.tweet.retweetcount || 0) + 1
+    uni.showToast({ title: '转推成功', icon: 'success' })
+    setTimeout(() => uni.switchTab({ url: '/pages/home/index' }), 500)
   } catch (e) { userStore.openLoginModal() }
 }
 
@@ -136,9 +147,45 @@ const handleShare = () => {
 }
 
 const showMenu = () => {
+  const items = props.tweet.user?.id === userStore.userInfo?.id 
+    ? ['删除帖子'] 
+    : ['不感兴趣', '举报 @' + props.tweet.user?.username]
+  
   uni.showActionSheet({
-    itemList: ['不感兴趣', '举报'],
-    success: () => {}
+    itemList: items,
+    success: async (res) => {
+      if (props.tweet.user?.id === userStore.userInfo?.id) {
+        // 删除自己的帖子
+        if (res.tapIndex === 0) {
+          uni.showModal({
+            title: '删除帖子？',
+            content: '此操作无法撤销',
+            confirmText: '删除',
+            confirmColor: '#f4212e',
+            success: async (r) => {
+              if (r.confirm) {
+                try {
+                  await post(`/tweets/${props.tweet.id}/delete`)
+                  uni.showToast({ title: '已删除', icon: 'success' })
+                  emit('refresh')
+                } catch (e) {}
+              }
+            }
+          })
+        }
+      } else {
+        if (res.tapIndex === 0) {
+          // 不感兴趣
+          uni.showToast({ title: '将减少此类内容推荐', icon: 'none' })
+        } else if (res.tapIndex === 1) {
+          // 举报
+          uni.showActionSheet({
+            itemList: ['垃圾信息', '辱骂或骚扰', '虚假信息', '其他'],
+            success: () => uni.showToast({ title: '感谢反馈，我们会尽快处理', icon: 'none' })
+          })
+        }
+      }
+    }
   })
 }
 
@@ -259,5 +306,14 @@ const previewImage = (index) => {
 
 .action.retweeted {
   color: #00ba7c;
+}
+
+.action.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.action.disabled:hover {
+  color: var(--text-secondary);
 }
 </style>

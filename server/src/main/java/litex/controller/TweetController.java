@@ -11,6 +11,7 @@ public class TweetController {
     public Routes routes() {
         return new Routes()
             .get("/api/tweets/timeline", this::timeline)
+            .get("/api/tweets/following", this::followingTimeline)
             .post("/api/tweets", this::create)
             .get("/api/tweets/:id", this::get)
             .delete("/api/tweets/:id", this::delete)
@@ -29,11 +30,32 @@ public class TweetController {
         ctx.ok(Service.tweet.getTimeline(userId, page, size));
     }
     
+    void followingTimeline(Context ctx) {
+        Long userId = Auth.getUserId(ctx);
+        int page = ctx.queryParamInt("page", 1);
+        int size = ctx.queryParamInt("size", 20);
+        ctx.ok(Service.tweet.getFollowingTimeline(userId, page, size));
+    }
+    
     void create(Context ctx) {
         Long userId = Auth.getUserId(ctx);
         Map<String, Object> body = ctx.bindJSON();
         String content = (String) body.get("content");
-        String images = body.get("images") != null ? body.get("images").toString() : null;
+        Object imagesObj = body.get("images");
+        String images = null;
+        if (imagesObj != null) {
+            if (imagesObj instanceof java.util.List) {
+                java.util.List<?> list = (java.util.List<?>) imagesObj;
+                if (!list.isEmpty()) {
+                    images = String.join(",", list.stream().map(Object::toString).toArray(String[]::new));
+                }
+            } else {
+                String str = imagesObj.toString();
+                if (!str.isEmpty() && !"[]".equals(str)) {
+                    images = str;
+                }
+            }
+        }
         ctx.ok(Service.tweet.create(userId, content, images));
     }
     

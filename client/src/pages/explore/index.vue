@@ -8,7 +8,7 @@
           <text class="search-icon">🔍</text>
           <input class="search-input" placeholder="搜索" v-model="keyword" @confirm="search" />
         </view>
-        <text class="settings-icon">⚙️</text>
+        <text class="settings-icon" @click="showSettingsTip">⚙️</text>
       </view>
 
       <!-- 标签页 -->
@@ -20,7 +20,7 @@
       </view>
 
       <!-- 热门话题大图 -->
-      <view v-if="featuredTrend" class="featured-trend" @click="searchTag(featuredTrend.tag)">
+      <view v-if="featuredTrend" class="featured-trend" :style="featuredTrend.image ? { backgroundImage: 'url(' + featuredTrend.image + ')' } : {}" @click="searchTag(featuredTrend.tag)">
         <view class="featured-overlay">
           <text class="featured-category">{{ featuredTrend.category || '热门' }}</text>
           <text class="featured-title">#{{ featuredTrend.tag }}</text>
@@ -84,6 +84,8 @@ const searchTag = (tag) => uni.navigateTo({ url: `/pages/search/result?q=${encod
 const loadMore = () => {
   showCount.value += 10
 }
+
+const showSettingsTip = () => uni.showToast({ title: '探索设置功能开发中', icon: 'none' })
 </script>
 
 <style scoped>
@@ -99,7 +101,7 @@ const loadMore = () => {
 .tab:hover { background: var(--bg-hover); }
 .tab.active { color: var(--text-primary); font-weight: bold; }
 .tab.active::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 56px; height: 4px; background: var(--accent-primary); border-radius: 2px; }
-.featured-trend { position: relative; height: 300px; background: linear-gradient(135deg, #1a1a2e, #16213e); cursor: pointer; }
+.featured-trend { position: relative; height: 300px; background: linear-gradient(135deg, #1a1a2e, #16213e); cursor: pointer; background-size: cover; background-position: center; }
 .featured-overlay { position: absolute; bottom: 16px; left: 16px; right: 16px; }
 .featured-category { background: var(--accent-primary); padding: 4px 8px; border-radius: 4px; font-size: 13px; color: #fff; }
 .featured-title { font-size: 23px; font-weight: bold; display: block; margin: 8px 0; color: var(--text-primary); }

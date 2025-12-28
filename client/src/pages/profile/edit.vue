@@ -48,7 +48,7 @@
             @focus="websiteFocused = true" @blur="websiteFocused = false" />
         </view>
         
-        <view class="birth-section">
+        <view class="birth-section" @click="showTip('出生日期')">
           <text class="section-label">出生日期</text>
           <text class="birth-value">{{ formatBirthday() }}</text>
           <text class="birth-hint">· 编辑</text>
@@ -61,7 +61,7 @@
 <script setup>
 import { reactive, ref, onMounted } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { put } from '@/utils/request'
+import { put, SERVER_URL } from '@/utils/request'
 
 const userStore = useUserStore()
 const saving = ref(false)
@@ -73,6 +73,10 @@ const websiteFocused = ref(false)
 const form = reactive({ 
   nickname: '', bio: '', location: '', website: '', avatar: '', banner: '', birthday: null 
 })
+
+// 待上传的本地文件
+const pendingAvatar = ref('')
+const pendingBanner = ref('')
 
 onMounted(() => {
   const user = userStore.userInfo
@@ -88,11 +92,51 @@ onMounted(() => {
 })
 
 const chooseAvatar = () => {
-  uni.chooseImage({ count: 1, success: (res) => { form.avatar = res.tempFilePaths[0] } })
+  uni.chooseImage({ 
+    count: 1, 
+    success: (res) => { 
+      pendingAvatar.value = res.tempFilePaths[0]
+      form.avatar = res.tempFilePaths[0]  // 预览用
+    } 
+  })
 }
 
 const chooseBanner = () => {
-  uni.chooseImage({ count: 1, success: (res) => { form.banner = res.tempFilePaths[0] } })
+  uni.chooseImage({ 
+    count: 1, 
+    success: (res) => { 
+      pendingBanner.value = res.tempFilePaths[0]
+      form.banner = res.tempFilePaths[0]  // 预览用
+    } 
+  })
+}
+
+// 上传图片
+const uploadImage = (filePath) => {
+  return new Promise((resolve, reject) => {
+    uni.uploadFile({
+      url: SERVER_URL + '/api/upload/image',
+      filePath: filePath,
+      name: 'file',
+      header: {
+        'Authorization': 'Bearer ' + uni.getStorageSync('token')
+      },
+      success: (res) => {
+        try {
+          const data = JSON.parse(res.data)
+          if (data.code === 0 && data.data?.url) {
+            // 返回完整 URL
+            resolve(SERVER_URL + data.data.url)
+          } else {
+            reject(new Error(data.msg || '上传失败'))
+          }
+        } catch (e) {
+          reject(new Error('上传失败'))
+        }
+      },
+      fail: (err) => reject(err)
+    })
+  })
 }
 
 const formatBirthday = () => {
@@ -104,6 +148,16 @@ const formatBirthday = () => {
 const saveProfile = async () => {
   saving.value = true
   try {
+    // 先上传图片
+    if (pendingAvatar.value) {
+      form.avatar = await uploadImage(pendingAvatar.value)
+      pendingAvatar.value = ''
+    }
+    if (pendingBanner.value) {
+      form.banner = await uploadImage(pendingBanner.value)
+      pendingBanner.value = ''
+    }
+    
     await put('/user/profile', form)
     await userStore.fetchUserInfo()
     uni.showToast({ title: '保存成功', icon: 'success' })
@@ -116,6 +170,7 @@ const saveProfile = async () => {
 }
 
 const goBack = () => uni.navigateBack()
+const showTip = (name) => uni.showToast({ title: `${name}功能开发中`, icon: 'none' })
 </script>
 
 <style scoped>
@@ -139,7 +194,7 @@ const goBack = () => uni.navigateBack()
 .input-group:focus-within { border-color: var(--accent-primary); }
 .label { position: absolute; left: 12px; top: 16px; color: var(--text-secondary); font-size: 17px; pointer-events: none; transition: all 0.2s; }
 .label.up { top: 8px; font-size: 13px; color: var(--accent-primary); }
-.input, .textarea { width: 100%; background: transparent; border: none; font-size: 17px; color: var(--text-primary); outline: none; }
+.input, .textarea { width: 100%; background: transparent; border: none; font-size: 17px; color: var(--text-primary); outline: none; -webkit-text-fill-color: var(--text-primary); }
 .textarea { min-height: 80px; resize: none; }
 .char-count { position: absolute; right: 12px; top: 8px; font-size: 13px; color: var(--text-secondary); }
 .birth-section { padding: 16px 0; border-top: 1px solid var(--border-color); }

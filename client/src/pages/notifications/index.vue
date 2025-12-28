@@ -4,7 +4,7 @@
     <view class="main-content">
       <view class="header">
         <text class="title">通知</text>
-        <text class="settings-icon">⚙️</text>
+        <text class="settings-icon" @click="showSettingsTip">⚙️</text>
       </view>
       <view class="tabs">
         <view class="tab" :class="{ active: tab === 'all' }" @click="switchTab('all')">全部</view>
@@ -64,7 +64,7 @@ const fetchNotifications = async () => {
 const switchTab = (t) => { tab.value = t; fetchNotifications() }
 
 const getIcon = (type) => {
-  const icons = { like: '❤️', retweet: '🔁', follow: '👤', mention: '@', comment: '💬', quote: '📝' }
+  const icons = { like: '👍', retweet: '🔁', follow: '👤', mention: '@', comment: '💬', quote: '📝' }
   return icons[type] || '🔔'
 }
 
@@ -82,6 +82,8 @@ const goDetail = (item) => {
   if (item.tweetid) uni.navigateTo({ url: `/pages/tweet/detail?id=${item.tweetid}` })
   else if (item.fromUser?.id) uni.navigateTo({ url: `/pages/profile/index?id=${item.fromUser.id}` })
 }
+
+const showSettingsTip = () => uni.showToast({ title: '通知设置功能开发中', icon: 'none' })
 </script>
 
 <style scoped>

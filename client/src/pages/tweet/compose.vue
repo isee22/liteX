@@ -9,7 +9,7 @@
       <view class="compose-header">
         <text class="close-btn" @click="goBack">✕</text>
         <view class="spacer"></view>
-        <text class="draft-btn">草稿</text>
+        <text class="draft-btn" @click="showTip('草稿')">草稿</text>
       </view>
 
       <!-- 发帖内容 -->
@@ -17,7 +17,7 @@
         <image class="avatar" :src="userStore.userInfo?.avatar || '/static/default-avatar.png'" />
         <view class="compose-content">
           <!-- 可见性选择 -->
-          <view class="visibility-btn" @click="showVisibility = !showVisibility">
+          <view class="visibility-btn" @click="showTip('可见性设置')">
             所有人 ▾
           </view>
           
@@ -39,7 +39,7 @@
           </view>
 
           <!-- 谁可以回复 -->
-          <view class="reply-setting">
+          <view class="reply-setting" @click="showTip('回复设置')">
             <text class="reply-text">🌍 所有人都可以回复</text>
           </view>
         </view>
@@ -49,11 +49,11 @@
       <view class="compose-footer">
         <view class="toolbar">
           <text class="tool-icon" @click="chooseImage">🖼️</text>
-          <text class="tool-icon">📷</text>
-          <text class="tool-icon" @click="showPoll = true">📊</text>
-          <text class="tool-icon">😊</text>
-          <text class="tool-icon">📅</text>
-          <text class="tool-icon">📍</text>
+          <text class="tool-icon" @click="showTip('拍照')">📷</text>
+          <text class="tool-icon" @click="showTip('投票')">📊</text>
+          <text class="tool-icon" @click="showTip('表情')">😊</text>
+          <text class="tool-icon" @click="showTip('日程')">📅</text>
+          <text class="tool-icon" @click="showTip('位置')">📍</text>
         </view>
         <view class="footer-right">
           <!-- 字数统计 -->
@@ -61,7 +61,7 @@
             <view class="progress-ring"></view>
           </view>
           <view class="divider"></view>
-          <text class="add-btn">+</text>
+          <text class="add-btn" @click="showTip('添加推文')">+</text>
           <button class="post-btn" :disabled="!content.trim()" @click="submitTweet">发布</button>
         </view>
       </view>
@@ -78,8 +78,7 @@ const userStore = useUserStore()
 const tweetStore = useTweetStore()
 const content = ref('')
 const images = ref([])
-const showVisibility = ref(false)
-const showPoll = ref(false)
+const showTip = (name) => uni.showToast({ title: `${name}功能开发中`, icon: 'none' })
 
 const chooseImage = () => {
   uni.chooseImage({
@@ -97,7 +96,26 @@ const removeImage = (index) => {
 const submitTweet = async () => {
   if (!content.value.trim()) return
   try {
-    await tweetStore.createTweet(content.value, images.value)
+    // 先上传图片
+    const uploadedUrls = []
+    for (const img of images.value) {
+      const res = await uni.uploadFile({
+        url: 'http://localhost:8080/api/upload/image',
+        filePath: img,
+        name: 'file',
+        header: {
+          'Authorization': 'Bearer ' + uni.getStorageSync('token')
+        }
+      })
+      const data = JSON.parse(res.data)
+      if (data.code === 0) {
+        uploadedUrls.push(data.data.url)
+      } else {
+        throw new Error(data.msg || '图片上传失败')
+      }
+    }
+    
+    await tweetStore.createTweet(content.value, uploadedUrls)
     uni.showToast({ title: '发布成功', icon: 'success' })
     setTimeout(() => uni.navigateBack(), 500)
   } catch (e) {

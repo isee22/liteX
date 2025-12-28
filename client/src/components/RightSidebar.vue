@@ -38,13 +38,13 @@
         </view>
         <button class="btn-follow" @click="followUser(item.user?.id || item.id)">关注</button>
       </view>
-      <view class="card-link">显示更多</view>
+      <view class="card-link" @click="showMoreUsers">显示更多</view>
     </view>
 
     <!-- 底部链接 -->
     <view class="footer-links">
-      <text>服务条款</text>
-      <text>隐私政策</text>
+      <text @click="goTerms">服务条款</text>
+      <text @click="goPrivacy">隐私政策</text>
       <text>Cookie政策</text>
       <text>© 2024 X Corp.</text>
     </view>
@@ -52,13 +52,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { get, post } from '@/utils/request'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { post } from '@/utils/request'
+import { useAppStore } from '@/stores/app'
 
+const appStore = useAppStore()
 const searchText = ref('')
-const trends = ref([])
-const recommendUsers = ref([])
 const isSmallScreen = ref(false)
+
+const trends = computed(() => appStore.trends)
+const recommendUsers = computed(() => appStore.recommendUsers)
 
 const checkScreen = () => {
   const info = uni.getSystemInfoSync()
@@ -67,8 +70,8 @@ const checkScreen = () => {
 
 onMounted(() => {
   checkScreen()
-  fetchTrends()
-  fetchRecommend()
+  appStore.fetchTrends()
+  appStore.fetchRecommend()
   // #ifdef H5
   window.addEventListener('resize', checkScreen)
   // #endif
@@ -79,20 +82,6 @@ onUnmounted(() => {
   window.removeEventListener('resize', checkScreen)
   // #endif
 })
-
-const fetchTrends = async () => {
-  try {
-    const res = await get('/trends')
-    trends.value = (res.data || []).slice(0, 4)
-  } catch (e) {}
-}
-
-const fetchRecommend = async () => {
-  try {
-    const res = await get('/user/recommend')
-    recommendUsers.value = (res.data || []).slice(0, 3)
-  } catch (e) {}
-}
 
 const formatCount = (count) => {
   if (!count) return '0'
@@ -107,18 +96,29 @@ const doSearch = () => {
 }
 
 const searchTag = (tag) => uni.navigateTo({ url: `/pages/search/result?q=${encodeURIComponent('#' + tag)}` })
-const goExplore = () => uni.switchTab({ url: '/pages/explore/index' })
+const goExplore = () => {
+  // #ifdef H5
+  window.location.href = '/#/pages/explore/index'
+  // #endif
+  // #ifndef H5
+  uni.switchTab({ url: '/pages/explore/index' })
+  // #endif
+}
 const goProfile = (id) => uni.navigateTo({ url: `/pages/profile/index?id=${id}` })
 
 const followUser = async (id) => {
   try {
     await post(`/user/${id}/follow`)
-    recommendUsers.value = recommendUsers.value.filter(item => (item.user?.id || item.id) !== id)
+    appStore.removeRecommendUser(id)
     uni.showToast({ title: '关注成功', icon: 'success' })
   } catch (e) {
     uni.showToast({ title: '请先登录', icon: 'none' })
   }
 }
+
+const showMoreUsers = () => uni.navigateTo({ url: '/pages/explore/index' })
+const goTerms = () => uni.navigateTo({ url: '/pages/login/terms' })
+const goPrivacy = () => uni.navigateTo({ url: '/pages/login/privacy' })
 </script>
 
 <style scoped>

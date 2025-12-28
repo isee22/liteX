@@ -54,9 +54,6 @@
         <RightSidebar />
       </view>
     </template>
-    
-    <!-- 发帖弹窗 -->
-    <ComposeModal />
   </view>
 </template>
 
@@ -68,7 +65,6 @@ import { useComposeStore } from '@/stores/compose'
 import LeftSidebar from '@/components/LeftSidebar.vue'
 import RightSidebar from '@/components/RightSidebar.vue'
 import TweetItem from '@/components/TweetItem.vue'
-import ComposeModal from '@/components/ComposeModal.vue'
 
 const userStore = useUserStore()
 const tweetStore = useTweetStore()
@@ -109,7 +105,7 @@ const loadTweets = async () => {
   page.value = 1
   try {
     const res = await tweetStore.fetchTimeline(1, tab.value)
-    tweets.value = (res?.list || []).map(item => item.tweet ? { ...item.tweet, user: item.user, liked: item.liked } : item)
+    tweets.value = (res?.list || []).map(item => item.tweet ? { ...item.tweet, user: item.user, liked: item.liked, retweeted: item.retweeted } : item)
   } catch (e) {}
   loading.value = false
 }
@@ -120,13 +116,17 @@ const loadMore = async () => {
   page.value++
   try {
     const res = await tweetStore.fetchTimeline(page.value, tab.value)
-    const list = (res?.list || []).map(item => item.tweet ? { ...item.tweet, user: item.user, liked: item.liked } : item)
+    const list = (res?.list || []).map(item => item.tweet ? { ...item.tweet, user: item.user, liked: item.liked, retweeted: item.retweeted } : item)
     tweets.value.push(...list)
   } catch (e) {}
   loading.value = false
 }
 
-const openCompose = () => composeStore.open()
+const openCompose = () => {
+  console.log('openCompose clicked, before:', composeStore.visible)
+  composeStore.open()
+  console.log('openCompose clicked, after:', composeStore.visible)
+}
 const goProfile = () => uni.navigateTo({ url: '/pages/profile/index' })
 const goSettings = () => uni.navigateTo({ url: '/pages/settings/index' })
 </script>
@@ -200,7 +200,7 @@ const goSettings = () => uni.navigateTo({ url: '/pages/settings/index' })
 }
 
 .twitter-layout { display: flex; max-width: 1280px; margin: 0 auto; background: var(--bg-primary); }
-.main-content { flex: 1; max-width: 600px; border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); min-height: 100vh; background: var(--bg-primary); }
+.main-content { flex: 1; max-width: 600px; min-width: 600px; border-left: 1px solid var(--border-color); border-right: 1px solid var(--border-color); min-height: 100vh; background: var(--bg-primary); }
 .compose-box { display: flex; padding: 16px; border-bottom: 1px solid var(--border-color); }
 .compose-avatar { width: 40px; height: 40px; border-radius: 50%; }
 .compose-input { flex: 1; margin-left: 12px; cursor: pointer; }

@@ -1,7 +1,6 @@
 <script setup>
 import { onLaunch } from '@dcloudio/uni-app'
 import { useThemeStore } from '@/stores/theme'
-import LoginModal from '@/components/LoginModal.vue'
 
 onLaunch(() => {
   console.log('App Launch')
@@ -10,13 +9,10 @@ onLaunch(() => {
 })
 </script>
 
-<template>
-  <LoginModal />
-</template>
-
 <style>
 @import './styles/tailwind.css';
 @import './styles/themes.css';
+@import './styles/base.css';
 
 /* 全局基础样式 - 使用 CSS 变量 */
 page, uni-page-body, body, html {
@@ -50,10 +46,20 @@ page, uni-page-body, body, html {
 .main-content {
   flex: 1;
   max-width: 600px;
+  min-width: 600px;
   min-height: 100vh;
   border-left: 1px solid var(--border-color, #2f3336);
   border-right: 1px solid var(--border-color, #2f3336);
   background: var(--bg-primary);
+}
+
+/* 手机端 main-content 响应式 */
+@media (max-width: 768px) {
+  .main-content {
+    max-width: 100% !important;
+    min-width: auto !important;
+    border: none !important;
+  }
 }
 
 .right-sidebar {
@@ -119,5 +125,10 @@ uni-input input, uni-textarea textarea {
   -webkit-user-select: text !important;
   user-select: text !important;
   pointer-events: auto !important;
+}
+
+/* Toast 始终在最上层 */
+uni-toast, .uni-toast {
+  z-index: 99999 !important;
 }
 </style>

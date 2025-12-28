@@ -5,7 +5,7 @@
       <view class="header">
         <text class="title">私信</text>
         <view class="header-actions">
-          <text class="action-icon">⚙️</text>
+          <text class="action-icon" @click="showSettingsTip">⚙️</text>
           <text class="action-icon" @click="newMessage">✉️</text>
         </view>
       </view>
@@ -76,6 +76,7 @@ const formatTime = (time) => {
 
 const goChat = (chat) => uni.navigateTo({ url: `/pages/messages/chat?userId=${chat.user?.id}` })
 const newMessage = () => uni.navigateTo({ url: '/pages/messages/new' })
+const showSettingsTip = () => uni.showToast({ title: '私信设置功能开发中', icon: 'none' })
 </script>
 
 <style scoped>

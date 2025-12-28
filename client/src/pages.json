@@ -7,6 +7,9 @@
     { "path": "pages/profile/index", "style": { "navigationStyle": "custom" } },
     { "path": "pages/login/index", "style": { "navigationStyle": "custom" } },
     { "path": "pages/login/register", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/login/forgot", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/login/terms", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/login/privacy", "style": { "navigationStyle": "custom" } },
     { "path": "pages/tweet/detail", "style": { "navigationStyle": "custom" } },
     { "path": "pages/tweet/compose", "style": { "navigationStyle": "custom" } },
     { "path": "pages/profile/edit", "style": { "navigationStyle": "custom" } },
@@ -17,6 +20,9 @@
     { "path": "pages/bookmarks/index", "style": { "navigationStyle": "custom" } },
     { "path": "pages/settings/index", "style": { "navigationStyle": "custom" } },
     { "path": "pages/settings/blocked", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/settings/account", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/settings/password", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/settings/muted", "style": { "navigationStyle": "custom" } },
     { "path": "pages/messages/new", "style": { "navigationStyle": "custom" } }
   ],
   "globalStyle": {
