@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+unpackage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local env
+.env.local
+.env.*.local

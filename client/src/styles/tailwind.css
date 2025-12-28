@@ -1,0 +1,196 @@
+/* 基础变量 */
+:root {
+  --bg-primary: #000;
+  --bg-secondary: #16181c;
+  --bg-tertiary: #202327;
+  --bg-hover: #080808;
+  --bg-modal: rgba(0,0,0,0.65);
+  --bg-primary-alpha: rgba(0,0,0,0.65);
+  --text-primary: #e7e9ea;
+  --text-secondary: #71767b;
+  --border-color: #2f3336;
+  --accent-primary: #1d9bf0;
+  --accent-primary-alpha: rgba(29,155,240,0.1);
+  --accent-hover: #1a8cd8;
+  --success: #00ba7c;
+  --error: #f4212e;
+  --warning: #ffd400;
+}
+
+/* 按钮基础样式 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border: none;
+  outline: none;
+}
+
+.btn-primary {
+  background: var(--accent-primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--text-secondary);
+  color: var(--text-primary);
+}
+.btn-secondary:hover {
+  background: var(--bg-hover);
+}
+
+.btn-white {
+  background: #fff;
+  color: #000;
+}
+.btn-white:hover {
+  background: #e7e9ea;
+}
+
+/* 输入框 */
+.input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  outline: none;
+}
+.input:focus {
+  border-color: var(--accent-primary);
+}
+
+/* 卡片 */
+.card {
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* 头像 */
+.avatar {
+  border-radius: 9999px;
+  object-fit: cover;
+  background: var(--bg-tertiary);
+}
+.avatar-sm { width: 32px; height: 32px; }
+.avatar-md { width: 40px; height: 40px; }
+.avatar-lg { width: 48px; height: 48px; }
+.avatar-xl { width: 128px; height: 128px; }
+
+/* 导航项 */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.nav-item:hover {
+  background: var(--bg-hover);
+}
+.nav-item.active {
+  font-weight: 700;
+}
+
+/* 推文操作 */
+.tweet-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.tweet-action:hover {
+  color: var(--accent-primary);
+}
+
+/* 标签页 */
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 16px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  position: relative;
+}
+.tab:hover {
+  background: var(--bg-hover);
+}
+.tab.active {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 4px;
+  background: var(--accent-primary);
+  border-radius: 2px;
+}
+
+/* 动画 */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 颜色工具类 */
+.text-primary { color: var(--accent-primary); }
+.text-success { color: var(--success); }
+.text-error { color: var(--error); }
+.text-text-primary { color: var(--text-primary); }
+.text-text-secondary { color: var(--text-secondary); }
+.bg-primary { background: var(--accent-primary); }
+.bg-bg-primary { background: var(--bg-primary); }
+.bg-bg-secondary { background: var(--bg-secondary); }
+.bg-bg-tertiary { background: var(--bg-tertiary); }
+.bg-bg-hover { background: var(--bg-hover); }
+.border-border { border-color: var(--border-color); }
+
+/* 隐藏滚动条 */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* 玻璃效果 */
+.glass {
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* 修复 input 无法输入问题 */
+input, textarea {
+  -webkit-user-select: auto !important;
+  user-select: auto !important;
+  pointer-events: auto !important;
+}
+
+uni-input {
+  pointer-events: auto !important;
+}
+
+uni-input input {
+  -webkit-user-select: auto !important;
+  user-select: auto !important;
+}

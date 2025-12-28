@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+# 日志配置
+logging:
+  path: logs
+  level: INFO
+  maxFileSize: 10MB
+  maxHistory: 30
+
+# Hibernate - 只用于 DDL 自动建表
+hibernate:
+  url: jdbc:mysql://localhost:3306/litex?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  username: root
+  password: 123456
+  driver: com.mysql.cj.jdbc.Driver
+  dialect: org.hibernate.dialect.MySQL8Dialect
+  showSql: false
+  hbm2ddl: update
+  packages: litex.entity
+
+# MyBatis - 用于查询
+mybatis:
+  url: jdbc:mysql://localhost:3306/litex?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  username: root
+  password: 123456
+  poolMaxSize: 10
+  mapperPackage: litex.mapper
+
+# 文件上传配置
+upload:
+  path: uploads
+  maxSize: 5242880
+  videoMaxSize: 52428800

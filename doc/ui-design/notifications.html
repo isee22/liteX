@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>通知 - Twitter Clone</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="layout">
+    <!-- 左侧导航 -->
+    <aside class="left-sidebar">
+      <div class="logo">𝕏</div>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-text">首页</span></a>
+        <a href="explore.html" class="nav-item"><span class="nav-icon">🔍</span><span class="nav-text">探索</span></a>
+        <a href="notifications.html" class="nav-item active"><span class="nav-icon">🔔</span><span class="nav-text">通知</span></a>
+        <a href="messages.html" class="nav-item"><span class="nav-icon">✉️</span><span class="nav-text">私信</span></a>
+        <a href="bookmarks.html" class="nav-item"><span class="nav-icon">🔖</span><span class="nav-text">书签</span></a>
+        <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span><span class="nav-text">个人资料</span></a>
+        <div class="nav-item"><span class="nav-icon">⚪</span><span class="nav-text">更多</span></div>
+      </nav>
+      <button class="post-btn"><span>发帖</span></button>
+      <div class="spacer"></div>
+      <div class="user-menu">
+        <div class="user-avatar"></div>
+        <div class="user-info"><span class="user-name">张三</span><span class="user-handle">@zhangsan</span></div>
+        <span style="color:#71767b">···</span>
+      </div>
+    </aside>
+
+    <!-- 中间主内容 -->
+    <main class="main-content">
+      <div class="header">
+        <span class="header-title">通知</span>
+        <span style="margin-left: auto; font-size: 20px; cursor: pointer;">⚙️</span>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active">全部</div>
+        <div class="tab">已验证</div>
+        <div class="tab">提及</div>
+      </div>
+
+      <!-- 通知列表 -->
+      <div class="notification-list">
+        <!-- 点赞通知 -->
+        <div class="notification-item" style="display: flex; padding: 16px; border-bottom: 1px solid #2f3336; cursor: pointer;">
+          <div style="width: 40px; text-align: center;">
+            <span style="font-size: 24px; color: #f91880;">❤️</span>
+          </div>
+          <div style="flex: 1; margin-left: 12px;">
+            <div style="display: flex; align-items: center; margin-bottom: 4px;">
+              <div class="user-avatar" style="width: 32px; height: 32px;"></div>
+              <div class="user-avatar" style="width: 32px; height: 32px; margin-left: -8px;"></div>
+              <div class="user-avatar" style="width: 32px; height: 32px; margin-left: -8px;"></div>
+            </div>
+            <p style="font-size: 15px;"><strong>李四</strong>、<strong>王五</strong> 和其他 5 人赞了你的帖子</p>
+            <p style="color: #71767b; font-size: 15px; margin-top: 4px;">今天天气真好！出去走走吧 ☀️</p>
+          </div>
+        </div>
+
+        <!-- 转推通知 -->
+        <div class="notification-item" style="display: flex; padding: 16px; border-bottom: 1px solid #2f3336; cursor: pointer;">
+          <div style="width: 40px; text-align: center;">
+            <span style="font-size: 24px; color: #00ba7c;">🔁</span>
+          </div>
+          <div style="flex: 1; margin-left: 12px;">
+            <div style="display: flex; align-items: center; margin-bottom: 4px;">
+              <div class="user-avatar" style="width: 32px; height: 32px;"></div>
+            </div>
+            <p style="font-size: 15px;"><strong>赵六</strong> 转推了你的帖子</p>
+            <p style="color: #71767b; font-size: 15px; margin-top: 4px;">刚刚学会了一个新技能，分享给大家！</p>
+          </div>
+        </div>
+
+        <!-- 关注通知 -->
+        <div class="notification-item" style="display: flex; padding: 16px; border-bottom: 1px solid #2f3336; cursor: pointer;">
+          <div style="width: 40px; text-align: center;">
+            <span style="font-size: 24px; color: #1d9bf0;">👤</span>
+          </div>
+          <div style="flex: 1; margin-left: 12px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center;">
+                <div class="user-avatar" style="width: 40px; height: 40px;"></div>
+                <div style="margin-left: 12px;">
+                  <p style="font-size: 15px;"><strong>科技博主</strong> 关注了你</p>
+                  <p style="color: #71767b; font-size: 13px;">@techblogger</p>
+                </div>
+              </div>
+              <button class="follow-btn">关注</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 评论通知 -->
+        <div class="notification-item" style="display: flex; padding: 16px; border-bottom: 1px solid #2f3336; cursor: pointer;">
+          <div style="width: 40px; text-align: center;">
+            <span style="font-size: 24px; color: #1d9bf0;">💬</span>
+          </div>
+          <div style="flex: 1; margin-left: 12px;">
+            <div style="display: flex; align-items: center; margin-bottom: 4px;">
+              <div class="user-avatar" style="width: 32px; height: 32px;"></div>
+            </div>
+            <p style="font-size: 15px;"><strong>美食达人</strong> 回复了你</p>
+            <p style="color: #71767b; font-size: 15px; margin-top: 4px;">推荐去西湖边走走，风景很美！</p>
+          </div>
+        </div>
+
+        <!-- 提及通知 -->
+        <div class="notification-item" style="display: flex; padding: 16px; border-bottom: 1px solid #2f3336; cursor: pointer;">
+          <div style="width: 40px; text-align: center;">
+            <span style="font-size: 24px;">@</span>
+          </div>
+          <div style="flex: 1; margin-left: 12px;">
+            <div style="display: flex; align-items: center; margin-bottom: 4px;">
+              <div class="user-avatar" style="width: 32px; height: 32px;"></div>
+            </div>
+            <p style="font-size: 15px;"><strong>旅行家</strong> 在帖子中提到了你</p>
+            <p style="color: #71767b; font-size: 15px; margin-top: 4px;">@zhangsan 你觉得这个地方怎么样？</p>
+          </div>
+        </div>
+
+        <!-- 引用通知 -->
+        <div class="notification-item" style="display: flex; padding: 16px; border-bottom: 1px solid #2f3336; cursor: pointer;">
+          <div style="width: 40px; text-align: center;">
+            <span style="font-size: 24px; color: #1d9bf0;">📝</span>
+          </div>
+          <div style="flex: 1; margin-left: 12px;">
+            <div style="display: flex; align-items: center; margin-bottom: 4px;">
+              <div class="user-avatar" style="width: 32px; height: 32px;"></div>
+            </div>
+            <p style="font-size: 15px;"><strong>程序员小王</strong> 引用了你的帖子</p>
+            <p style="font-size: 15px; margin-top: 8px;">说得太对了！👍</p>
+            <div style="border: 1px solid #2f3336; border-radius: 16px; padding: 12px; margin-top: 8px;">
+              <p style="color: #71767b; font-size: 13px;">@zhangsan</p>
+              <p style="font-size: 15px; margin-top: 4px;">刚刚学会了一个新技能...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 右侧边栏 -->
+    <aside class="right-sidebar">
+      <div class="search-box" style="margin-top: 8px;">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" placeholder="搜索">
+      </div>
+      <div class="card">
+        <div class="card-title">热门话题</div>
+        <div class="trend-item">
+          <div class="trend-category">热门 · 科技</div>
+          <div class="trend-name">#人工智能</div>
+          <div class="trend-count">12.5万 帖子</div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-category">热门 · 娱乐</div>
+          <div class="trend-name">#周末电影</div>
+          <div class="trend-count">8.3万 帖子</div>
+        </div>
+        <div class="show-more">显示更多</div>
+      </div>
+      <div class="footer-links">
+        <a href="#">服务条款</a>
+        <a href="#">隐私政策</a>
+        <span>© 2024 X Corp.</span>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>
