@@ -37,7 +37,7 @@ mybatis:
 
 # 文件上传配置
 upload:
-  location: ./uploads
+  location: ../uploads
   max-file-size: 5MB
   max-request-size: 50MB
   image-types: jpg,jpeg,png,gif,webp # 图片白名单
@@ -47,8 +47,8 @@ upload:
 # 静态文件服务（Gin 风格）
 static:
   mappings:
-    /uploads: ./uploads/
-    /static: ./static/
+    /uploads: ../uploads/
+    /static: ../static/
   cache-max-age: 3600
   index-file: index.html
 
@@ -74,7 +74,7 @@ bot:
 crawler:
   enabled: true
   intervalMinutes: 60
-  imageDir: ./uploads/crawler
+  imageDir: ../uploads/crawler
   maxContents: 500
   maxImages: 200
   threadNum: 2

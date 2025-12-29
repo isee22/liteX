@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+unpackage/
+
+# Logs
+*.log
+
+# UniApp
+.hbuilderx/
+
+# Vite
+.vite/

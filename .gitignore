@@ -2,8 +2,6 @@
 .idea/
 *.iml
 .vscode/
-*.swp
-*.swo
 
 # OS
 .DS_Store
@@ -13,14 +11,6 @@ Thumbs.db
 logs/
 *.log
 
-# Uploads (keep directory, ignore contents)
-uploads/*
-!uploads/.gitkeep
-
-# Static (keep directory, ignore generated)
-static/*
-!static/.gitkeep
-
 # Build
 target/
 dist/
@@ -29,10 +19,11 @@ build/
 # Dependencies
 node_modules/
 
-# Environment
+# Env
 .env
 .env.local
 .env.*.local
 
 # Test
+test.json
 test_result.txt
