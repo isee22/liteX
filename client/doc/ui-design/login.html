@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 - Twitter Clone</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 登录弹窗 -->
+  <div style="position: fixed; inset: 0; background: rgba(91,112,131,0.4); display: flex; align-items: center; justify-content: center; z-index: 100;">
+    <div style="background: #000; border-radius: 16px; width: 100%; max-width: 600px; max-height: 90vh; overflow: auto; padding: 32px;">
+      <!-- 关闭按钮 -->
+      <div style="display: flex; justify-content: center; margin-bottom: 24px;">
+        <span style="font-size: 32px; font-weight: bold;">𝕏</span>
+      </div>
+
+      <h1 style="font-size: 31px; font-weight: bold; margin-bottom: 32px;">登录 𝕏</h1>
+
+      <!-- 第三方登录 -->
+      <button style="width: 100%; background: #fff; color: #0f1419; border: none; border-radius: 9999px; padding: 12px; font-size: 15px; font-weight: bold; margin-bottom: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <span>🔵</span> 使用 Google 账号登录
+      </button>
+      <button style="width: 100%; background: #fff; color: #0f1419; border: none; border-radius: 9999px; padding: 12px; font-size: 15px; font-weight: bold; margin-bottom: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <span>🍎</span> 使用 Apple 账号登录
+      </button>
+
+      <!-- 分隔线 -->
+      <div style="display: flex; align-items: center; margin-bottom: 24px;">
+        <div style="flex: 1; height: 1px; background: #2f3336;"></div>
+        <span style="padding: 0 16px; color: #e7e9ea;">或</span>
+        <div style="flex: 1; height: 1px; background: #2f3336;"></div>
+      </div>
+
+      <!-- 表单 -->
+      <div style="margin-bottom: 24px;">
+        <div style="position: relative; margin-bottom: 24px;">
+          <input type="text" style="width: 100%; background: transparent; border: 1px solid #333639; border-radius: 4px; padding: 24px 12px 8px; font-size: 17px; color: #e7e9ea; outline: none; box-sizing: border-box;" placeholder=" ">
+          <label style="position: absolute; left: 12px; top: 16px; color: #71767b; font-size: 17px; pointer-events: none; transition: all 0.2s;">手机号、邮箱或用户名</label>
+        </div>
+        <button style="width: 100%; background: #eff3f4; color: #0f1419; border: none; border-radius: 9999px; padding: 16px; font-size: 17px; font-weight: bold; cursor: pointer;">下一步</button>
+      </div>
+
+      <button style="width: 100%; background: transparent; border: 1px solid #536471; color: #e7e9ea; border-radius: 9999px; padding: 16px; font-size: 17px; font-weight: bold; cursor: pointer; margin-bottom: 40px;">忘记密码？</button>
+
+      <p style="color: #71767b; font-size: 15px;">
+        没有账号？ <a href="register.html" style="color: #1d9bf0;">注册</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- 背景 -->
+  <div style="min-height: 100vh; background: #000;"></div>
+</body>
+</html>

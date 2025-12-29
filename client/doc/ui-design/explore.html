@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>探索 - Twitter Clone</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="layout">
+    <!-- 左侧导航 -->
+    <aside class="left-sidebar">
+      <div class="logo">𝕏</div>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-text">首页</span></a>
+        <a href="explore.html" class="nav-item active"><span class="nav-icon">🔍</span><span class="nav-text">探索</span></a>
+        <a href="notifications.html" class="nav-item"><span class="nav-icon">🔔</span><span class="nav-text">通知</span></a>
+        <a href="messages.html" class="nav-item"><span class="nav-icon">✉️</span><span class="nav-text">私信</span></a>
+        <a href="bookmarks.html" class="nav-item"><span class="nav-icon">🔖</span><span class="nav-text">书签</span></a>
+        <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span><span class="nav-text">个人资料</span></a>
+        <div class="nav-item"><span class="nav-icon">⚪</span><span class="nav-text">更多</span></div>
+      </nav>
+      <button class="post-btn"><span>发帖</span></button>
+      <div class="spacer"></div>
+      <div class="user-menu">
+        <div class="user-avatar"></div>
+        <div class="user-info"><span class="user-name">张三</span><span class="user-handle">@zhangsan</span></div>
+        <span style="color:#71767b">···</span>
+      </div>
+    </aside>
+
+    <!-- 中间主内容 -->
+    <main class="main-content">
+      <!-- 搜索框 -->
+      <div class="header" style="padding: 8px 16px;">
+        <div class="search-box" style="flex: 1; margin: 0;">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" placeholder="搜索">
+        </div>
+        <span style="margin-left: 16px; font-size: 20px; cursor: pointer;">⚙️</span>
+      </div>
+
+      <!-- 标签页 -->
+      <div class="tabs">
+        <div class="tab active">为你推荐</div>
+        <div class="tab">热门</div>
+        <div class="tab">新闻</div>
+        <div class="tab">体育</div>
+        <div class="tab">娱乐</div>
+      </div>
+
+      <!-- 热门话题大图 -->
+      <div style="position: relative; height: 300px; background: linear-gradient(135deg, #1a1a2e, #16213e); border-bottom: 1px solid #2f3336;">
+        <div style="position: absolute; bottom: 16px; left: 16px; right: 16px;">
+          <span style="background: #1d9bf0; padding: 4px 8px; border-radius: 4px; font-size: 13px;">科技</span>
+          <h2 style="font-size: 23px; margin: 8px 0;">人工智能的未来发展趋势</h2>
+          <p style="color: #71767b; font-size: 15px;">热门话题 · 12.5万 帖子</p>
+        </div>
+      </div>
+
+      <!-- 热门话题列表 -->
+      <div class="trend-section">
+        <div class="trend-item" style="padding: 16px; border-bottom: 1px solid #2f3336;">
+          <div style="display: flex; justify-content: space-between;">
+            <span class="trend-category">1 · 热门话题</span>
+            <span style="color: #71767b; cursor: pointer;">···</span>
+          </div>
+          <div class="trend-name" style="font-size: 15px; margin: 4px 0;">#ChatGPT</div>
+          <div class="trend-count">25.6万 帖子</div>
+        </div>
+        <div class="trend-item" style="padding: 16px; border-bottom: 1px solid #2f3336;">
+          <div style="display: flex; justify-content: space-between;">
+            <span class="trend-category">2 · 热门话题</span>
+            <span style="color: #71767b; cursor: pointer;">···</span>
+          </div>
+          <div class="trend-name" style="font-size: 15px; margin: 4px 0;">#周末去哪玩</div>
+          <div class="trend-count">18.3万 帖子</div>
+        </div>
+        <div class="trend-item" style="padding: 16px; border-bottom: 1px solid #2f3336;">
+          <div style="display: flex; justify-content: space-between;">
+            <span class="trend-category">3 · 热门话题</span>
+            <span style="color: #71767b; cursor: pointer;">···</span>
+          </div>
+          <div class="trend-name" style="font-size: 15px; margin: 4px 0;">#新电影上映</div>
+          <div class="trend-count">15.2万 帖子</div>
+        </div>
+        <div class="trend-item" style="padding: 16px; border-bottom: 1px solid #2f3336;">
+          <div style="display: flex; justify-content: space-between;">
+            <span class="trend-category">4 · 体育</span>
+            <span style="color: #71767b; cursor: pointer;">···</span>
+          </div>
+          <div class="trend-name" style="font-size: 15px; margin: 4px 0;">#NBA季后赛</div>
+          <div class="trend-count">12.8万 帖子</div>
+        </div>
+        <div class="trend-item" style="padding: 16px; border-bottom: 1px solid #2f3336;">
+          <div style="display: flex; justify-content: space-between;">
+            <span class="trend-category">5 · 娱乐</span>
+            <span style="color: #71767b; cursor: pointer;">···</span>
+          </div>
+          <div class="trend-name" style="font-size: 15px; margin: 4px 0;">#音乐节</div>
+          <div class="trend-count">9.5万 帖子</div>
+        </div>
+        <div class="trend-item" style="padding: 16px; border-bottom: 1px solid #2f3336;">
+          <div style="display: flex; justify-content: space-between;">
+            <span class="trend-category">6 · 生活</span>
+            <span style="color: #71767b; cursor: pointer;">···</span>
+          </div>
+          <div class="trend-name" style="font-size: 15px; margin: 4px 0;">#健康饮食</div>
+          <div class="trend-count">7.2万 帖子</div>
+        </div>
+        <div class="show-more" style="padding: 16px; color: #1d9bf0; cursor: pointer;">显示更多</div>
+      </div>
+    </main>
+
+    <!-- 右侧边栏 -->
+    <aside class="right-sidebar">
+      <div class="card" style="margin-top: 16px;">
+        <div class="card-title">推荐关注</div>
+        <div class="user-item">
+          <div class="user-avatar"></div>
+          <div class="user-info" style="margin-left: 12px;">
+            <span class="user-name">科技博主</span>
+            <span class="user-handle">@techblogger</span>
+          </div>
+          <button class="follow-btn">关注</button>
+        </div>
+        <div class="user-item">
+          <div class="user-avatar"></div>
+          <div class="user-info" style="margin-left: 12px;">
+            <span class="user-name">美食达人</span>
+            <span class="user-handle">@foodie</span>
+          </div>
+          <button class="follow-btn">关注</button>
+        </div>
+        <div class="show-more">显示更多</div>
+      </div>
+      <div class="footer-links">
+        <a href="#">服务条款</a>
+        <a href="#">隐私政策</a>
+        <span>© 2024 X Corp.</span>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>

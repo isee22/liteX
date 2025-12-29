@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>书签 - Twitter Clone</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="layout">
+    <!-- 左侧导航 -->
+    <aside class="left-sidebar">
+      <div class="logo">𝕏</div>
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-text">首页</span></a>
+        <a href="explore.html" class="nav-item"><span class="nav-icon">🔍</span><span class="nav-text">探索</span></a>
+        <a href="notifications.html" class="nav-item"><span class="nav-icon">🔔</span><span class="nav-text">通知</span></a>
+        <a href="messages.html" class="nav-item"><span class="nav-icon">✉️</span><span class="nav-text">私信</span></a>
+        <a href="bookmarks.html" class="nav-item active"><span class="nav-icon">🔖</span><span class="nav-text">书签</span></a>
+        <a href="profile.html" class="nav-item"><span class="nav-icon">👤</span><span class="nav-text">个人资料</span></a>
+        <div class="nav-item"><span class="nav-icon">⚪</span><span class="nav-text">更多</span></div>
+      </nav>
+      <button class="post-btn"><span>发帖</span></button>
+      <div class="spacer"></div>
+      <div class="user-menu">
+        <div class="user-avatar"></div>
+        <div class="user-info"><span class="user-name">张三</span><span class="user-handle">@zhangsan</span></div>
+        <span style="color:#71767b">···</span>
+      </div>
+    </aside>
+
+    <!-- 中间主内容 -->
+    <main class="main-content">
+      <div class="header" style="justify-content: space-between;">
+        <div>
+          <span class="header-title">书签</span>
+          <p style="font-size: 13px; color: #71767b;">@zhangsan</p>
+        </div>
+        <span style="font-size: 20px; cursor: pointer;">···</span>
+      </div>
+
+      <!-- 书签列表 -->
+      <article class="tweet">
+        <div class="tweet-avatar"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">科技博主</span>
+            <span class="tweet-handle">@techblogger</span>
+            <span class="tweet-time">· 3天前</span>
+            <span class="tweet-more">···</span>
+          </div>
+          <div class="tweet-text">2024年最值得学习的10个编程技术：
+
+1. AI/机器学习
+2. Rust
+3. WebAssembly
+4. Kubernetes
+5. GraphQL
+...
+
+#编程 #技术趋势</div>
+          <div class="tweet-actions">
+            <div class="tweet-action"><span class="action-icon">💬</span><span>156</span></div>
+            <div class="tweet-action"><span class="action-icon">🔁</span><span>89</span></div>
+            <div class="tweet-action liked"><span class="action-icon">❤️</span><span>1.2K</span></div>
+            <div class="tweet-action"><span class="action-icon">📊</span><span>25K</span></div>
+            <div class="tweet-action"><span class="action-icon">🔖</span></div>
+            <div class="tweet-action"><span class="action-icon">📤</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="tweet">
+        <div class="tweet-avatar"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">美食达人</span>
+            <span class="tweet-handle">@foodie</span>
+            <span class="tweet-time">· 1周前</span>
+            <span class="tweet-more">···</span>
+          </div>
+          <div class="tweet-text">分享一个超简单的早餐食谱 🍳
+
+材料：鸡蛋、吐司、牛油果
+步骤：
+1. 煎蛋
+2. 烤吐司
+3. 切牛油果
+4. 组合
+
+5分钟搞定！</div>
+          <div class="tweet-media"></div>
+          <div class="tweet-actions">
+            <div class="tweet-action"><span class="action-icon">💬</span><span>45</span></div>
+            <div class="tweet-action"><span class="action-icon">🔁</span><span>23</span></div>
+            <div class="tweet-action liked"><span class="action-icon">❤️</span><span>567</span></div>
+            <div class="tweet-action"><span class="action-icon">📊</span><span>8.9K</span></div>
+            <div class="tweet-action"><span class="action-icon">🔖</span></div>
+            <div class="tweet-action"><span class="action-icon">📤</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="tweet">
+        <div class="tweet-avatar"></div>
+        <div class="tweet-content">
+          <div class="tweet-header">
+            <span class="tweet-name">旅行家</span>
+            <span class="tweet-handle">@traveler</span>
+            <span class="tweet-time">· 2周前</span>
+            <span class="tweet-more">···</span>
+          </div>
+          <div class="tweet-text">日本旅行攻略 🇯🇵
+
+东京必去景点：
+- 浅草寺
+- 涩谷十字路口
+- 新宿御苑
+- 秋叶原
+
+收藏备用！</div>
+          <div class="tweet-actions">
+            <div class="tweet-action"><span class="action-icon">💬</span><span>78</span></div>
+            <div class="tweet-action"><span class="action-icon">🔁</span><span>156</span></div>
+            <div class="tweet-action liked"><span class="action-icon">❤️</span><span>2.3K</span></div>
+            <div class="tweet-action"><span class="action-icon">📊</span><span>45K</span></div>
+            <div class="tweet-action"><span class="action-icon">🔖</span></div>
+            <div class="tweet-action"><span class="action-icon">📤</span></div>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <!-- 右侧边栏 -->
+    <aside class="right-sidebar">
+      <div class="search-box" style="margin-top: 8px;">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" placeholder="搜索">
+      </div>
+      <div class="card">
+        <div class="card-title">热门话题</div>
+        <div class="trend-item">
+          <div class="trend-category">热门 · 科技</div>
+          <div class="trend-name">#人工智能</div>
+          <div class="trend-count">12.5万 帖子</div>
+        </div>
+        <div class="trend-item">
+          <div class="trend-category">热门 · 娱乐</div>
+          <div class="trend-name">#周末电影</div>
+          <div class="trend-count">8.3万 帖子</div>
+        </div>
+        <div class="show-more">显示更多</div>
+      </div>
+      <div class="footer-links">
+        <a href="#">服务条款</a>
+        <a href="#">隐私政策</a>
+        <span>© 2024 X Corp.</span>
+      </div>
+    </aside>
+  </div>
+</body>
+</html>

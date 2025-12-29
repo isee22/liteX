@@ -1,0 +1,109 @@
+server:
+  port: 8080
+
+# 日志配置
+logging:
+  path: logs
+  level: INFO
+  maxFileSize: 10MB
+  maxHistory: 30
+
+# HikariCP 数据源
+datasource:
+  url: jdbc:mysql://localhost:3306/litex?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  username: root
+  password: 123456
+  driver: com.mysql.cj.jdbc.Driver
+  poolMaxSize: 10
+
+# Hibernate - 只用于 DDL 自动建表
+hibernate:
+  url: jdbc:mysql://localhost:3306/litex?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  username: root
+  password: 123456
+  driver: com.mysql.cj.jdbc.Driver
+  dialect: org.hibernate.dialect.MySQL8Dialect
+  showSql: false
+  hbm2ddl: update
+  packages: litex.entity
+
+# MyBatis - 用于查询
+mybatis:
+  url: jdbc:mysql://localhost:3306/litex?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  username: root
+  password: 123456
+  poolMaxSize: 10
+  mapperPackage: litex.mapper
+
+# 文件上传配置
+upload:
+  location: ./uploads
+  max-file-size: 5MB
+  max-request-size: 50MB
+  image-types: jpg,jpeg,png,gif,webp # 图片白名单
+  video-types: mp4,webm,mov,avi # 视频白名单
+  blocked-types: exe,bat,cmd,sh,ps1,vbs,js,jar,msi,dll,scr,com,pif,php,asp,aspx,jsp # 通用文件黑名单
+
+# 静态文件服务（Gin 风格）
+static:
+  mappings:
+    /uploads: ./uploads/
+    /static: ./static/
+  cache-max-age: 3600
+  index-file: index.html
+
+# 机器人配置
+bot:
+  enabled: true
+  intervalSeconds: 30
+  usernamePrefix: test_,demo_,user_
+  defaultPassword: 123456
+  weightRegister: 10
+  weightTweet: 30
+  weightTweetWithMedia: 15
+  weightReply: 20
+  weightLike: 25
+  weightRetweet: 10
+  weightFollow: 15
+  weightMessage: 5
+  emojiChance: 30
+  imageChance: 40
+  hashtagChance: 40
+
+# 爬虫配置
+crawler:
+  enabled: true
+  intervalMinutes: 60
+  imageDir: ./uploads/crawler
+  maxContents: 500
+  maxImages: 200
+  threadNum: 2
+  sleepTime: 1000
+  timeout: 10000
+  targets:
+    - name: 一言
+      url: https://v1.hitokoto.cn/?encode=text
+      type: content
+      selector: body
+      selectorType: css
+    - name: 古诗词
+      url: https://v1.jinrishici.com/all.txt
+      type: content
+      selector: body
+      selectorType: css
+    - name: 随机图片
+      url: https://picsum.photos/800/600
+      type: image
+
+# 自动装配插件（类名用下划线代替点号）
+plugins:
+  litex_plugin_RequestLogPlugin: true
+  litex_plugin_HealthCheckPlugin: true
+  litex_plugin_hotreload_HotReloadPlugin: true
+
+# Swagger API 文档
+swagger:
+  title: LiteX API
+  version: 1.0.0
+  description: Twitter Clone API
+  path: /swagger-ui

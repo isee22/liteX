@@ -1,0 +1,111 @@
+/* 主题系统 - 通过 CSS 变量实现一键换肤 */
+
+/* 深色主题 (Twitter Dark) */
+[data-theme="dark"] {
+  --bg-primary: #000000;
+  --bg-primary-rgb: 0, 0, 0;
+  --bg-primary-alpha: rgba(0, 0, 0, 0.65);
+  --bg-secondary: #16181c;
+  --bg-tertiary: #202327;
+  --bg-hover: #080808;
+  --bg-modal: rgba(91, 112, 131, 0.4);
+  
+  --text-primary: #e7e9ea;
+  --text-secondary: #71767b;
+  --text-link: #1d9bf0;
+  
+  --border-color: #2f3336;
+  --divider-color: #2f3336;
+  
+  --accent-primary: #1d9bf0;
+  --accent-hover: #1a8cd8;
+  --accent-light: rgba(29, 155, 240, 0.1);
+  --accent-primary-alpha: rgba(29, 155, 240, 0.1);
+  
+  --btn-primary-bg: #eff3f4;
+  --btn-primary-text: #0f1419;
+  --btn-secondary-bg: transparent;
+  --btn-secondary-border: #536471;
+  
+  --success: #00ba7c;
+  --error: #f4212e;
+  --warning: #ffd400;
+  
+  --shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+/* 暗淡主题 (Twitter Dim) */
+[data-theme="dim"] {
+  --bg-primary: #15202b;
+  --bg-primary-rgb: 21, 32, 43;
+  --bg-primary-alpha: rgba(21, 32, 43, 0.65);
+  --bg-secondary: #1e2732;
+  --bg-tertiary: #263340;
+  --bg-hover: #1c2938;
+  --bg-modal: rgba(91, 112, 131, 0.4);
+  
+  --text-primary: #f7f9f9;
+  --text-secondary: #8b98a5;
+  --text-link: #1d9bf0;
+  
+  --border-color: #38444d;
+  --divider-color: #38444d;
+
+  --accent-primary: #1d9bf0;
+  --accent-hover: #1a8cd8;
+  --accent-light: rgba(29, 155, 240, 0.1);
+  --accent-primary-alpha: rgba(29, 155, 240, 0.1);
+  
+  --btn-primary-bg: #eff3f4;
+  --btn-primary-text: #0f1419;
+  --btn-secondary-bg: transparent;
+  --btn-secondary-border: #5c6e7e;
+  
+  --success: #00ba7c;
+  --error: #f4212e;
+  --warning: #ffd400;
+  
+  --shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* 浅色主题 (Twitter Light) */
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-primary-rgb: 255, 255, 255;
+  --bg-primary-alpha: rgba(255, 255, 255, 0.65);
+  --bg-secondary: #f7f9f9;
+  --bg-tertiary: #eff3f4;
+  --bg-hover: #f7f7f7;
+  --bg-modal: rgba(0, 0, 0, 0.4);
+  
+  --text-primary: #0f1419;
+  --text-secondary: #536471;
+  --text-link: #1d9bf0;
+  
+  --border-color: #eff3f4;
+  --divider-color: #eff3f4;
+  
+  --accent-primary: #1d9bf0;
+  --accent-hover: #1a8cd8;
+  --accent-light: rgba(29, 155, 240, 0.1);
+  --accent-primary-alpha: rgba(29, 155, 240, 0.1);
+  
+  --btn-primary-bg: #0f1419;
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: transparent;
+  --btn-secondary-border: #cfd9de;
+  
+  --success: #00ba7c;
+  --error: #f4212e;
+  --warning: #ffd400;
+  
+  --shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 主题色变体 */
+[data-color="blue"] { --accent-primary: #1d9bf0; --accent-hover: #1a8cd8; }
+[data-color="yellow"] { --accent-primary: #ffd400; --accent-hover: #e6bf00; }
+[data-color="pink"] { --accent-primary: #f91880; --accent-hover: #e01673; }
+[data-color="purple"] { --accent-primary: #7856ff; --accent-hover: #6b4de6; }
+[data-color="orange"] { --accent-primary: #ff7a00; --accent-hover: #e66e00; }
+[data-color="green"] { --accent-primary: #00ba7c; --accent-hover: #00a870; }
