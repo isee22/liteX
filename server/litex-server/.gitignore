@@ -3,5 +3,14 @@ dependency-reduced-pom.xml
 *.class
 *.jar
 *.log
+
+# IDE
 .idea/
 *.iml
+.vscode/
+
+# Eclipse
+.project
+.classpath
+.settings/
+bin/
